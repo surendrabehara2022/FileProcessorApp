@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "FileProcessorApp": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
