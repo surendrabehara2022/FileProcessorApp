@@ -1,31 +1,27 @@
-# Stage 1: Build stage using the SDK image
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
+# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-# Set the working directory inside the container
-WORKDIR /src
-
-# Copy the .csproj file and restore dependencies
-COPY FileProcessorApp/FileProcessorApp.csproj ./FileProcessorApp/
-RUN dotnet restore ./FileProcessorApp/FileProcessorApp.csproj
-
-# Copy the rest of the application source code
-COPY . .
-
-# Set the working directory to the project folder and build the app
-WORKDIR /src/FileProcessorApp
-RUN dotnet build FileProcessorApp.csproj -c $BUILD_CONFIGURATION -o /app/build
-
-# Stage 2: Publish the app to be used in the final image
-FROM build AS publish
-RUN dotnet publish FileProcessorApp.csproj -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-# Stage 3: Final runtime image
+# This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
+USER $APP_UID
 WORKDIR /app
 
-# Copy the published app from the previous stage
-COPY --from=publish /app/publish .
+# This stage is used to build the service project
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["FileProcessorApp/FileProcessorApp.csproj", "FileProcessorApp/"]
+RUN dotnet restore "./FileProcessorApp/FileProcessorApp.csproj"
+COPY . .
+WORKDIR "/src/FileProcessorApp"
+RUN dotnet build "./FileProcessorApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Entry point to run the application
+# This stage is used to publish the service project to be copied to the final stage
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./FileProcessorApp.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "FileProcessorApp.dll"]
