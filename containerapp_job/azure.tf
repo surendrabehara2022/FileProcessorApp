@@ -6,7 +6,8 @@ terraform {
     }
   }
 
-  required_version = "=1.3.2"
+ # required_version = "=1.3.2"
+  required_version = ">= 1.11.0"
   backend "azurerm" {
     container_name = "tfstate"
     key            = "terraform.deployment.tfplan"
