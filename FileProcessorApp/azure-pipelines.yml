@@ -80,16 +80,19 @@ steps:
 
 # Step 3: Initialize Terraform
 - script: |
+    cd '$(Build.SourcesDirectory)/containerapp_job
     terraform init -backend-config="resource_group_name=tfstatesa" -backend-config="storage_account_name=tf0001sa" -backend-config="key=terraform.deployment.tfplan"
   displayName: 'Terraform Init'
 
 # Step 4: Plan Terraform Changes
 - script: |
+    cd '$(Build.SourcesDirectory)/containerapp_job
     terraform plan -out "terraform.deployment.tfplan"
   displayName: 'Terraform Plan'
 
 # Step 5: Apply Terraform Changes (Conditional on plan)
 - script: |
+    cd '$(Build.SourcesDirectory)/containerapp_job
     terraform apply -auto-approve terraform.deployment.tfplan
   displayName: 'Terraform Apply'
 
