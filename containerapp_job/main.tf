@@ -58,6 +58,22 @@ resource "azurerm_container_app_job" "container_app_job" {
     parallelism     = 1
   }
 
+  secret {
+    name  = "acr-password"
+    value = azurerm_container_registry.acr.admin_password
+  }
+
+  registry {
+    server               = azurerm_container_registry.acr.login_server
+    username             = azurerm_container_registry.acr.admin_username
+    password_secret_name = "acr-password"
+  }
+
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.user_assigned_identity.id]
+  }
+
   template {
     container {
       image = "mytestacr001.azurecr.io/myconsoleapp:latest"
@@ -66,8 +82,4 @@ resource "azurerm_container_app_job" "container_app_job" {
       memory = "1Gi"
     }
  }
-  identity {
-    type         = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.user_assigned_identity.id]
-  }
 }
