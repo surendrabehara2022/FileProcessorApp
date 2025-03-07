@@ -86,11 +86,21 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
+    
+    # Navigate to the correct directory containing Terraform files
       cd '$(Build.SourcesDirectory)/containerapp_job'
+      
+    # Verify the current directory and list contents (useful for debugging)
       pwd
       ls -R
-      az storage account show --name tf0001sa --resource-group tfstatesa
-      terraform init -backend-config="resource_group_name=tfstatesa" -backend-config="storage_account_name=tf0001sa" -backend-config="key=terraform.deployment.tfplan"
+      
+    # Check if the Azure Storage account exists
+      az storage account show --name tf0001sa --resource-group tfstatesa    
+      
+    # Initialize Terraform with backend configuration
+      terraform init -backend-config="resource_group_name=tfstatesa" \
+                     -backend-config="storage_account_name=tf0001sa" \
+                     -backend-config="key=terraform.deployment.tfplan"
   displayName: 'Terraform Init'
 
 # Step 4: Plan Terraform Changes
