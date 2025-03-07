@@ -95,19 +95,27 @@ steps:
                      -backend-config="storage_account_name=tf0001sa" \
                      -backend-config="key=terraform.deployment.tfplan"
   displayName: 'Terraform Init'
-  
-# Step 4: Plan Terraform Changes
-- script: |
-    cd '$(Build.SourcesDirectory)/containerapp_job'
-    terraform plan -out "terraform.deployment.tfplan"
+
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'acrserviceconnectiontf'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      cd '$(Build.SourcesDirectory)/containerapp_job'
+      terraform plan -out "terraform.deployment.tfplan"
   displayName: 'Terraform Plan'
 
-# Step 5: Apply Terraform Changes (Conditional on plan)
-- script: |
-    cd '$(Build.SourcesDirectory)/containerapp_job'
-    terraform apply -auto-approve terraform.deployment.tfplan
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'acrserviceconnectiontf'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      cd '$(Build.SourcesDirectory)/containerapp_job'
+      terraform apply -auto-approve terraform.deployment.tfplan
   displayName: 'Terraform Apply'
-
+  
 # Step 5: Deploy to Azure Container App Job using Azure CLI
 - task: AzureCLI@2
   inputs:
