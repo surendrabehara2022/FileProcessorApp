@@ -114,9 +114,10 @@ steps:
     inlineScript: |
       cd '$(Build.SourcesDirectory)/containerapp_job'
       az acr login --name mytestacr001
+      docker pull mytestacr001.azurecr.io/myconsoleapp:latest
       terraform apply -auto-approve terraform.deployment.tfplan
   displayName: 'Terraform Apply'
-  
+
 # Step 5: Deploy to Azure Container App Job using Azure CLI
 - task: AzureCLI@2
   inputs:
