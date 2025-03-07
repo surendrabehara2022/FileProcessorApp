@@ -127,7 +127,7 @@ steps:
     inlineScript: |
       az acr login --name mytestacr001
       az containerapp job update \
-        --name manualmyconsoleappjob \
+        --name devcontainerappjob \
         --resource-group containerjobrg \
         --image mytestacr001.azurecr.io/$(imageName):latest \
         --debug                            
