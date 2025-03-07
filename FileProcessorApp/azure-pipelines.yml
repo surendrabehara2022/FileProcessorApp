@@ -113,6 +113,7 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: |
       cd '$(Build.SourcesDirectory)/containerapp_job'
+      az acr login --name mytestacr001
       terraform apply -auto-approve terraform.deployment.tfplan
   displayName: 'Terraform Apply'
   
