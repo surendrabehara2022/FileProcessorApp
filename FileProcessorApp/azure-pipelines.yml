@@ -19,6 +19,7 @@ steps:
 - script: |
     ls -R
     ls /home/vsts/work/1/s/FileProcessorApp/FileProcessorApp/Dockerfile
+    terraform -v
   displayName: 'List MyConsoleApp Contents'
 
 - script: |
