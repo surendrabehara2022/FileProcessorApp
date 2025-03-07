@@ -60,8 +60,8 @@ resource "azurerm_container_app_job" "container_app_job" {
 
   template {
     container {
-      image = "${azurerm_container_registry.acr.login_server}/myconsoleapp:latest"
-      name  = "containerappjob1"
+      image = "mytestacr001.azurecr.io/myconsoleapp:latest"
+      name  = "containerappjob"
       cpu    = 0.5
       memory = "1Gi"
     }
