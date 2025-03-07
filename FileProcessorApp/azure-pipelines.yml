@@ -86,6 +86,8 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: |
       cd '$(Build.SourcesDirectory)/containerapp_job
+      pwd
+      ls -R
       terraform init -backend-config="resource_group_name=tfstatesa" -backend-config="storage_account_name=tf0001sa" -backend-config="key=terraform.deployment.tfplan"
   displayName: 'Terraform Init'
 
