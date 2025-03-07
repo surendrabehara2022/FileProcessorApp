@@ -37,10 +37,19 @@ resource "azurerm_container_registry" "acr" {
   tags                = local.tags
 }
 
+resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
+  name                = "loganalyticsworkspace"
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+}
+
 resource "azurerm_container_app_environment" "env" {
   name                = "${local.env_name}-app-env"
   resource_group_name = var.resource_group_name
   location            = var.location
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.log_analytics_workspace.id
   tags     = local.tags
 }
 
