@@ -24,8 +24,4 @@ RUN dotnet publish "./FileProcessorApp.csproj" -c $BUILD_CONFIGURATION -o /app/p
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-
-# Ensure .NET runtime is available in the final image
-RUN dotnet --version
-
 ENTRYPOINT ["dotnet", "FileProcessorApp.dll"]
