@@ -24,4 +24,6 @@ RUN dotnet publish "./FileProcessorApp.csproj" -c $BUILD_CONFIGURATION -o /app/p
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+# List files to verify the presence of FileProcessorApp.dll
+RUN ls -la /app
 ENTRYPOINT ["dotnet", "FileProcessorApp.dll"]
