@@ -2,11 +2,14 @@
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
+RUN which dotnet || echo "dotnet not found"
+RUN dotnet --list-runtimes || echo "No .NET runtimes found"
 USER $APP_UID
 WORKDIR /app
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+RUN dotnet --version || echo ".NET not installed"
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["FileProcessorApp/FileProcessorApp.csproj", "FileProcessorApp/"]
