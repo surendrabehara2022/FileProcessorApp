@@ -4,8 +4,19 @@
 FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
 USER $APP_UID
 WORKDIR /app
-# Set the DOTNET_ROOT environment variable to the new path
-ENV DOTNET_ROOT=/usr/share/dotnet/shared
+
+# Set up custom directory for .NET runtimes
+RUN mkdir -p /usr/share/dotnet/Microsoft.NETCore.App
+
+# Copy the runtime from the default directory to the custom directory
+RUN cp -r /usr/share/dotnet/shared/Microsoft.NETCore.App /usr/share/dotnet/Microsoft.NETCore.App
+
+# Set DOTNET_ROOT to the custom location
+ENV DOTNET_ROOT=/usr/share/dotnet
+
+# Also, set DOTNET_SHARED_HOST_PATH to point to the new location
+ENV DOTNET_SHARED_HOST_PATH=/usr/share/dotnet/Microsoft.NETCore.App
+
 RUN which dotnet || echo "dotnet not found"
 RUN dotnet --list-runtimes || echo "No .NET runtimes found"
 
@@ -29,8 +40,4 @@ RUN dotnet publish "./FileProcessorApp.csproj" -c $BUILD_CONFIGURATION -o /app/p
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-# Set the DOTNET_ROOT environment variable to the new path
-ENV DOTNET_ROOT=/usr/share/dotnet/shared
-RUN which dotnet || echo "dotnet not found"
-RUN dotnet --list-runtimes || echo "No .NET runtimes found"
 ENTRYPOINT ["dotnet", "FileProcessorApp.dll"]
