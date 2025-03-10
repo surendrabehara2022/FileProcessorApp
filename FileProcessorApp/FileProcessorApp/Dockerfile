@@ -5,18 +5,6 @@ FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
 USER $APP_UID
 WORKDIR /app
 
-# Set up custom directory for .NET runtimes
-RUN mkdir -p /usr/share/dotnet/Microsoft.NETCore.App
-
-# Copy the runtime from the default directory to the custom directory
-RUN cp -r /usr/share/dotnet/shared/Microsoft.NETCore.App /usr/share/dotnet/Microsoft.NETCore.App
-
-# Set DOTNET_ROOT to the custom location
-ENV DOTNET_ROOT=/usr/share/dotnet
-
-# Also, set DOTNET_SHARED_HOST_PATH to point to the new location
-ENV DOTNET_SHARED_HOST_PATH=/usr/share/dotnet/Microsoft.NETCore.App
-
 RUN which dotnet || echo "dotnet not found"
 RUN dotnet --list-runtimes || echo "No .NET runtimes found"
 
