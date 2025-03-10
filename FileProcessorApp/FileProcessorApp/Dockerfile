@@ -2,10 +2,12 @@
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
-RUN which dotnet || echo "dotnet not found"
-RUN dotnet --list-runtimes || echo "No .NET runtimes found"
 USER $APP_UID
 WORKDIR /app
+# Set the DOTNET_ROOT environment variable to the new path
+ENV DOTNET_ROOT=/usr/share/dotnet
+RUN which dotnet || echo "dotnet not found"
+RUN dotnet --list-runtimes || echo "No .NET runtimes found"
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
@@ -27,6 +29,8 @@ RUN dotnet publish "./FileProcessorApp.csproj" -c $BUILD_CONFIGURATION -o /app/p
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-# List files to verify the presence of FileProcessorApp.dll
-RUN ls -la /app && dotnet --info
+# Set the DOTNET_ROOT environment variable to the new path
+ENV DOTNET_ROOT=/usr/share/dotnet
+RUN which dotnet || echo "dotnet not found"
+RUN dotnet --list-runtimes || echo "No .NET runtimes found"
 ENTRYPOINT ["dotnet", "FileProcessorApp.dll"]
