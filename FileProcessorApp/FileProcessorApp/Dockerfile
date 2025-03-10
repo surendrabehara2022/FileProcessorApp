@@ -28,5 +28,5 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 # List files to verify the presence of FileProcessorApp.dll
-RUN ls -la /app
+RUN ls -la /app && dotnet --info
 ENTRYPOINT ["dotnet", "FileProcessorApp.dll"]
