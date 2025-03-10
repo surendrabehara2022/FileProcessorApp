@@ -63,8 +63,9 @@ resource "azurerm_container_app_job" "container_app_job" {
   replica_retry_limit        = 10
 
   schedule_trigger_config {
-    cron_expression = "*/5 * * * *"
+#   cron_expression = "null"
     parallelism     = 1
+    trigger_type    = "manual"
   }
 
   secret {
