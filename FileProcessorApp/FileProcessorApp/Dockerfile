@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
 USER $APP_UID
 WORKDIR /app
 # Set the DOTNET_ROOT environment variable to the new path
-ENV DOTNET_ROOT=/usr/share/dotnet/shared/Microsoft.NETCore.App
+ENV DOTNET_ROOT=/usr/share/dotnet/shared
 RUN which dotnet || echo "dotnet not found"
 RUN dotnet --list-runtimes || echo "No .NET runtimes found"
 
@@ -30,7 +30,7 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 # Set the DOTNET_ROOT environment variable to the new path
-ENV DOTNET_ROOT=/usr/share/dotnet/shared/Microsoft.NETCore.App
+ENV DOTNET_ROOT=/usr/share/dotnet/shared
 RUN which dotnet || echo "dotnet not found"
 RUN dotnet --list-runtimes || echo "No .NET runtimes found"
 ENTRYPOINT ["dotnet", "FileProcessorApp.dll"]
