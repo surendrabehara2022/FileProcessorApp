@@ -2,7 +2,8 @@
 
 # Base stage: Running the application
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
-FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
+#FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
 USER $APP_UID
 WORKDIR /app
 
@@ -32,8 +33,6 @@ RUN ls /app/publish  # List the contents after publishing to verify
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
+COPY --from=publish /app/publish .
 RUN ls /app
-#COPY --from=publish /app/publish .
-COPY --from=publish /app/publish /app/publish
-RUN ls /app/publish
-ENTRYPOINT ["dotnet", "/app/publish/FileProcessorApp.dll", "--verbosity", "detailed"]
+ENTRYPOINT ["dotnet", "FileProcessorApp.dll"]
