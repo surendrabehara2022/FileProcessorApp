@@ -1,18 +1,15 @@
 # See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 # Base stage: Running the application
-# This stage is used when running from VS in fast mode (Default for Debug configuration)
 #FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER $APP_UID
 WORKDIR /app
-
 RUN dotnet --info
 RUN dotnet --list-runtimes || echo "No .NET runtimes found"
 
 # Build stage: Compiling the application
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-RUN dotnet --version || echo ".NET not installed"
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["FileProcessorApp/FileProcessorApp.csproj", "FileProcessorApp/"]
