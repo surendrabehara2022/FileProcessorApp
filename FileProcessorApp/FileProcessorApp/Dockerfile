@@ -32,4 +32,5 @@ RUN dotnet publish "./FileProcessorApp.csproj" -c $BUILD_CONFIGURATION -o /app/p
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ls /app/publish
 ENTRYPOINT ["sh", "-c", "dotnet FileProcessorApp.dll --verbosity detailed"]
