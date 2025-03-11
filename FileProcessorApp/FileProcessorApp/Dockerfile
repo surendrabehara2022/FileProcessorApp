@@ -35,4 +35,5 @@ WORKDIR /app
 #COPY --from=publish /app/publish .
 COPY --from=publish /app/publish /app/publish
 RUN ls /app/publish
-ENTRYPOINT ["sh", "-c", "dotnet FileProcessorApp.dll --verbosity detailed"]
+#ENTRYPOINT ["sh", "-c", "dotnet FileProcessorApp.dll --verbosity detailed"]
+ENTRYPOINT ["sh", "-c", "dotnet /app/publish/FileProcessorApp.dll --verbosity detailed"]
