@@ -32,6 +32,7 @@ RUN ls /app/publish  # List the contents after publishing to verify
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
+RUN ls /app
 #COPY --from=publish /app/publish .
 COPY --from=publish /app/publish /app/publish
 RUN ls /app/publish
