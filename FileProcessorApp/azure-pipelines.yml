@@ -12,7 +12,7 @@ steps:
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
-    version: '8.0.x'
+    version: '8.x'
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
 # Step 1: List contents of MyConsoleApp to verify the Dockerfile exists
