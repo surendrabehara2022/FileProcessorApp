@@ -37,6 +37,10 @@ steps:
 - script: |
     docker build -t $(imageName):$(Build.BuildId) -f '$(Build.SourcesDirectory)/FileProcessorApp/FileProcessorApp/Dockerfile' $(Build.SourcesDirectory)/FileProcessorApp
   displayName: 'Build Docker Image'
+  
+- script: |
+    docker run --rm $(imageName):$(Build.BuildId)
+  displayName: 'Run Docker Image'
 
 # Step 3: Tag Docker Image (optional but useful for pushing)
 - script: |
