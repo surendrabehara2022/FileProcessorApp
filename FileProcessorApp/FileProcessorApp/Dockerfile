@@ -5,10 +5,9 @@ FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
 #FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER $APP_UID
 WORKDIR /app
-# Optionally install dotnet-sdk if it's missing or not the right version
-RUN apt-get update && apt-get install -y dotnet-sdk-8.0
-RUN dotnet --info
-RUN dotnet --list-runtimes || echo "No .NET runtimes found"
+
+#RUN dotnet --info
+#RUN dotnet --list-runtimes || echo "No .NET runtimes found"
 
 # Build stage: Compiling the application
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
