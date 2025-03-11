@@ -5,8 +5,8 @@ FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
 #FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER $APP_UID
 WORKDIR /app
-RUN dotnet --info
-RUN dotnet --list-runtimes || echo "No .NET runtimes found"
+#RUN dotnet --info
+#RUN dotnet --list-runtimes || echo "No .NET runtimes found"
 
 # Build stage: Compiling the application
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
@@ -17,9 +17,9 @@ RUN dotnet restore "./FileProcessorApp/FileProcessorApp.csproj"
 COPY . .
 WORKDIR "/src/FileProcessorApp"
 # List all restored packages after restore
-RUN dotnet list package
+#RUN dotnet list package
 RUN dotnet build "./FileProcessorApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
-RUN dotnet --info
+#RUN dotnet --info
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
