@@ -5,6 +5,7 @@ FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
 USER $APP_UID
 WORKDIR /app
 
+RUN dotnet --info
 RUN dotnet --list-runtimes || echo "No .NET runtimes found"
 
 # This stage is used to build the service project
@@ -17,6 +18,7 @@ RUN dotnet restore "./FileProcessorApp/FileProcessorApp.csproj"
 COPY . .
 WORKDIR "/src/FileProcessorApp"
 RUN dotnet build "./FileProcessorApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet --info
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
