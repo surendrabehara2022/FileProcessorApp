@@ -15,6 +15,9 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["FileProcessorApp/FileProcessorApp.csproj", "FileProcessorApp/"]
 RUN dotnet restore "./FileProcessorApp/FileProcessorApp.csproj"
+
+# List all restored packages after restore
+RUN dotnet list package
 COPY . .
 WORKDIR "/src/FileProcessorApp"
 RUN dotnet build "./FileProcessorApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
