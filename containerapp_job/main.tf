@@ -59,8 +59,8 @@ resource "azurerm_container_app_job" "container_app_job" {
   resource_group_name          = var.resource_group_name
   container_app_environment_id = azurerm_container_app_environment.env.id
 
-  replica_timeout_in_seconds = 10
-  replica_retry_limit        = 10
+  replica_timeout_in_seconds = 120
+  replica_retry_limit        = 0
 
 #  schedule_trigger_config {
 #   cron_expression = "null"
